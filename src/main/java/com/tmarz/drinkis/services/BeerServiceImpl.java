@@ -13,7 +13,7 @@ import java.util.*;
 @Service
 public class BeerServiceImpl implements BeerService {
 
-    private Map<UUID, Beer> beerMap;
+    private final Map<UUID, Beer> beerMap;
 
     public BeerServiceImpl(){
         beerMap = new HashMap<>();
@@ -71,6 +71,18 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
+    public Beer updateBeerById(UUID id, Beer beer) {
+        Beer existing = beerMap.get(id);
+        existing.setBeerName(beer.getBeerName());
+        existing.setBeerStyle(beer.getBeerStyle());
+        existing.setPrice(beer.getPrice());
+        existing.setUpc(beer.getUpc());
+        existing.setQuantityOnHand(beer.getQuantityOnHand());
+        beerMap.put(existing.getId(), existing);
+        return existing;
+    }
+
+    @Override
     public UUID saveBeer(Beer beer) {
         Beer savedBeer = Beer.builder()
                 .id(UUID.randomUUID())
@@ -88,4 +100,11 @@ public class BeerServiceImpl implements BeerService {
         beerMap.put(beerId, savedBeer);
         return beerId;
     }
+
+    @Override
+    public void deleteBeerById(UUID id) {
+        beerMap.remove(id);
+    }
+
+
 }
